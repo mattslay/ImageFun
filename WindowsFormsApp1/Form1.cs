@@ -16,8 +16,11 @@ namespace WindowsFormsApp1
 
         public Form1()
         {
+
             InitializeComponent();
+
             Processor = new ImageProcessor();
+            imageProcessorBindingSource.DataSource = Processor;
 
             spinnerHorizontalTileCount.DataBindings.Add("Value", Processor, nameof(Processor.HorizontalTileCount));
             spinnerHorizontalTileSpacing.DataBindings.Add("Value", Processor, nameof(Processor.HorizontalTileSpacing));
@@ -36,6 +39,8 @@ namespace WindowsFormsApp1
             
             if (Processor.LoadImage("C:\\Temp\\TestIris.jpg"))
                 pictureBox1.Image = Processor.OriginalImage;
+
+            this.imageProcessorBindingSource.ResetBindings(false);
         }
 
 
@@ -62,10 +67,17 @@ namespace WindowsFormsApp1
             {
                 //pictureBox2.Image = null;
                 Processor.ResetProcessedImage();
-                Processor.PatchImage();
+                Processor.MapImage();
+                Processor.DrawNewImage();
                 pictureBox2.Image = Processor.ProcessedImage;
             }
         }
+
+        private void lblImageWidth_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 
 

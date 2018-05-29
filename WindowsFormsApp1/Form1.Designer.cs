@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -41,12 +42,18 @@
             this.labelHorizontalTileSpacing = new System.Windows.Forms.Label();
             this.spinnerHorizontalTileSpacing = new System.Windows.Forms.NumericUpDown();
             this.buttonPatch = new System.Windows.Forms.Button();
+            this.lblImageWidth = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.imageProcessorBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.spinnerHorizontalTileCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.spinnerVerticalTileCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.spinnerVerticalTileSpacing)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.spinnerHorizontalTileSpacing)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageProcessorBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -71,6 +78,9 @@
             // 
             // pictureBox2
             // 
+            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox2.Location = new System.Drawing.Point(450, 12);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(615, 511);
@@ -233,11 +243,62 @@
             this.buttonPatch.UseVisualStyleBackColor = true;
             this.buttonPatch.Click += new System.EventHandler(this.buttonPatch_Click);
             // 
+            // lblImageWidth
+            // 
+            this.lblImageWidth.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblImageWidth.AutoSize = true;
+            this.lblImageWidth.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.imageProcessorBindingSource, "ImageWidth", true));
+            this.lblImageWidth.Location = new System.Drawing.Point(293, 604);
+            this.lblImageWidth.Name = "lblImageWidth";
+            this.lblImageWidth.Size = new System.Drawing.Size(35, 13);
+            this.lblImageWidth.TabIndex = 13;
+            this.lblImageWidth.Text = "label1";
+            this.lblImageWidth.Click += new System.EventHandler(this.lblImageWidth_Click);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2.AutoSize = true;
+            this.label2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.imageProcessorBindingSource, "ImageHeight", true));
+            this.label2.Location = new System.Drawing.Point(296, 631);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "label2";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(213, 604);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(67, 13);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "Image Width";
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(213, 631);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(70, 13);
+            this.label4.TabIndex = 16;
+            this.label4.Text = "Image Height";
+            // 
+            // imageProcessorBindingSource
+            // 
+            this.imageProcessorBindingSource.DataSource = typeof(WindowsFormsApp1.ImageProcessor);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1077, 658);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblImageWidth);
             this.Controls.Add(this.buttonPatch);
             this.Controls.Add(this.labelVerticalTileSpacing);
             this.Controls.Add(this.spinnerVerticalTileSpacing);
@@ -259,6 +320,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.spinnerVerticalTileCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.spinnerVerticalTileSpacing)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.spinnerHorizontalTileSpacing)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageProcessorBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -279,6 +341,11 @@
         private System.Windows.Forms.Label labelHorizontalTileSpacing;
         private System.Windows.Forms.NumericUpDown spinnerHorizontalTileSpacing;
         private System.Windows.Forms.Button buttonPatch;
+        private System.Windows.Forms.Label lblImageWidth;
+        private System.Windows.Forms.BindingSource imageProcessorBindingSource;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }
 

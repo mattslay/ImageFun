@@ -13,10 +13,34 @@ namespace WindowsFormsApp1
         public Image OriginalImage = null;
         public Bitmap ProcessedImage = null;
 
-        public int HorizontalTileCount { get; set; } = 1;
-        public int VerticalTileCount { get; set; } = 1;
+        public int HorizontalTileCount { get; set; } = 100;
+        public int VerticalTileCount { get; set; } = 100;
         public int HorizontalTileSpacing { get; set; } = 10;
         public int VerticalTileSpacing { get; set; } = 10;
+
+        public string ImageWidth {
+            get
+            {
+                return OriginalImage == null ? "0" : OriginalImage.Width.ToString();
+            }
+
+         }
+
+        public string ImageHeight
+        {
+            get
+            {
+                return OriginalImage == null ? "0" : OriginalImage.Height.ToString();
+            }
+        }
+
+        private double XSampleSpacing;
+        private double YSampleSpacing;
+
+        private int XStartingOffset;
+        private int YStartingOffset;
+
+        List<ImageMapDataPoint[]> ImageMap;
 
         public ImageProcessor()
         {
@@ -62,7 +86,10 @@ namespace WindowsFormsApp1
             }
 
             if (imageLoaded)
+            {
                 ResetProcessedImage();
+            }
+
 
             return imageLoaded;
         }
@@ -74,17 +101,24 @@ namespace WindowsFormsApp1
         }
 
         // https://stackoverflow.com/questions/10210134/using-a-matrix-to-rotate-rectangles-individually
-        public void RotateRectangle(Graphics g, Rectangle r, float angle, Brush brush)
+        public void RotateRectangle(Graphics g, Rectangle r, float degrees, Brush brush)
         {
             using (Matrix m = new Matrix())
             {
-                m.RotateAt(angle, new PointF(r.Left + (r.Width / 2),
-                                          r.Top + (r.Height / 2)));
+                m.RotateAt(degrees, new PointF(r.Left + (r.Width / 2), r.Top + (r.Height / 2)));
                 g.Transform = m;
+
                 Pen pen = new Pen(brush);
-                //g.DrawRectangle(pen, r);
                 g.FillRectangle(brush, r);
+
+                // This code will draw an outline on the edges of the rectangle.
+                //Pen outlinePen = new Pen(Color.Black);
+                //outlinePen.DashStyle = DashStyle.Solid;
+                //outlinePen.Width = 1;
+                //g.DrawRectangle(outlinePen, r);
+
                 g.ResetTransform();
+
             }
         }
 
@@ -123,51 +157,57 @@ namespace WindowsFormsApp1
 
         //}
 
-        public void PatchImage()
+        public void DrawNewImage()
         {
             var originalBitmap = new Bitmap(OriginalImage);
             Graphics graphics = Graphics.FromImage(ProcessedImage);
-
-            int horizontalTileCount = HorizontalTileCount;
-            int verticalTileCount = VerticalTileCount;
             int patchSize = HorizontalTileSpacing;
-
-            //int horizontalTileCount = 100;
-            //int verticalTileCount = 100;
-            //int patchSize = 20  ;
-
-            double xSampleSpacing = (double) originalBitmap.Width / horizontalTileCount;
-            double ySampleSpacing = (double) originalBitmap.Height / verticalTileCount;
-
-            int xStartingOffset = (int)(xSampleSpacing / 2.0);
-            int yStartingOffset = (int)(ySampleSpacing / 2.0);
-
             var random = new Random(6);
 
-            for (int x = 0; x < horizontalTileCount ; x++)
+            foreach (ImageMapDataPoint[] imageDataPointArray in ImageMap)
             {
-                for (int y = 0; y < verticalTileCount; y++)
+                foreach (ImageMapDataPoint imageMapDataPoint in imageDataPointArray)
                 {
-                    int xSample = (int) (xStartingOffset + x * xSampleSpacing);
-                    int ySample = (int) (yStartingOffset + y * ySampleSpacing);
-
-                    //Color sourcePixelcColor = originalBitmap.GetPixel(xSample, ySample);
-                    //Color newPixelColor = sourcePixelcColor.Darken(25);
-                    //Color newPixelColor = sourcePixelcColor;
-
-                    var dominantColor = getDominantColor(originalBitmap, xSample, ySample, 10);
-                    int patchX = (int) (x * xSampleSpacing);
-                    int patchY = (int) (y * ySampleSpacing);
-
-                    SolidBrush brush = new SolidBrush(dominantColor);
-                    Rectangle patch = new Rectangle(patchX, patchY, patchSize, patchSize);
-                    int rotaionAngle = random.Next();
+                    SolidBrush brush = new SolidBrush(imageMapDataPoint.color);
+                    Rectangle patch = new Rectangle(imageMapDataPoint.x, imageMapDataPoint.y, patchSize, patchSize);
+                    int rotaionAngle = random.Next(0, 90);
                     RotateRectangle(graphics, patch, rotaionAngle, brush);
-                    //graphics.FillRectangle(brush, patch);
                 }
             }
-
         }
+
+        public void MapImage()
+        {
+            var originalBitmap = new Bitmap(OriginalImage);
+            int patchSize = HorizontalTileSpacing;
+
+            XSampleSpacing = (double) OriginalImage.Width / HorizontalTileCount;
+            YSampleSpacing = (double) OriginalImage.Height / VerticalTileCount;
+
+            XStartingOffset = (int)(XSampleSpacing / 2.0);
+            YStartingOffset = (int)(YSampleSpacing / 2.0);
+
+            ImageMap = new List<ImageMapDataPoint[]>();
+
+            for (int x = 0; x < HorizontalTileCount ; x++)
+            {
+                int xSample = (int)(XStartingOffset + x * XSampleSpacing);
+                ImageMapDataPoint[] array = new ImageMapDataPoint[VerticalTileCount];
+
+                for (int y = 0; y < VerticalTileCount; y++)
+                {
+                    int ySample = (int) (YStartingOffset + y * YSampleSpacing);
+                    var dominantColor = getDominantColor(originalBitmap, xSample, ySample, 10);
+
+                    ImageMapDataPoint imageMapDataPoint = new ImageMapDataPoint(xSample, ySample, dominantColor);
+                    array[y] = imageMapDataPoint;
+                }
+
+                ImageMap.Add(array);
+            }
+        }
+
+
 
         public void CreateImageWithSpread(int? horizontalTileCount = null,
                                           int? verticalTileCount = null,
@@ -260,3 +300,8 @@ namespace WindowsFormsApp1
 
     }
 }
+
+
+// https://stackoverflow.com/questions/10127871/how-can-i-read-image-pixels-values-as-rgb-into-2d-array
+
+// https://stackoverflow.com/questions/7413184/converting-a-jpeg-image-to-a-byte-array-com-exception
