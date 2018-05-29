@@ -8,13 +8,17 @@ using System.Threading.Tasks;
 
 namespace WindowsFormsApp1
 {
-    class ImageProcessor
+    class ImagePlayProcessor
     {
         public Image OriginalImage = null;
         public Bitmap ProcessedImage = null;
+        public List<ImageMapDataPoint[]> ImageMap;
 
         public int HorizontalTileCount { get; set; } = 100;
         public int VerticalTileCount { get; set; } = 100;
+
+        public int PatchSize { get; set; } = 25;
+
         public int HorizontalTileSpacing { get; set; } = 10;
         public int VerticalTileSpacing { get; set; } = 10;
 
@@ -40,9 +44,8 @@ namespace WindowsFormsApp1
         private int XStartingOffset;
         private int YStartingOffset;
 
-        List<ImageMapDataPoint[]> ImageMap;
 
-        public ImageProcessor()
+        public ImagePlayProcessor()
         {
         }
 
@@ -52,8 +55,12 @@ namespace WindowsFormsApp1
 
             try
             {
-                OriginalImage = Image.FromFile(filename);
-                imageLoaded = true;
+
+                using (var bmpTemp = new Bitmap(filename))
+                {
+                    OriginalImage = new Bitmap(bmpTemp);
+                   imageLoaded = true;
+                }
             }
             catch
             {
@@ -157,11 +164,11 @@ namespace WindowsFormsApp1
 
         //}
 
-        public void DrawNewImage()
+        public void DrawPatchedImage()
         {
             var originalBitmap = new Bitmap(OriginalImage);
             Graphics graphics = Graphics.FromImage(ProcessedImage);
-            int patchSize = HorizontalTileSpacing;
+            int patchSize = PatchSize;
             var random = new Random(6);
 
             foreach (ImageMapDataPoint[] imageDataPointArray in ImageMap)
@@ -179,7 +186,6 @@ namespace WindowsFormsApp1
         public void MapImage()
         {
             var originalBitmap = new Bitmap(OriginalImage);
-            int patchSize = HorizontalTileSpacing;
 
             XSampleSpacing = (double) OriginalImage.Width / HorizontalTileCount;
             YSampleSpacing = (double) OriginalImage.Height / VerticalTileCount;
@@ -209,7 +215,7 @@ namespace WindowsFormsApp1
 
 
 
-        public void CreateImageWithSpread(int? horizontalTileCount = null,
+        public void DrawImageWithSpread(int? horizontalTileCount = null,
                                           int? verticalTileCount = null,
                                           int? horizontalTileSpacing = null,
                                           int? verticalTileSpacing = null)

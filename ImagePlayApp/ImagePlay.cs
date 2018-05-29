@@ -10,16 +10,16 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
-    public partial class Form1 : Form
+    public partial class ImagePlay : Form
     {
-        ImageProcessor Processor = null;
+        ImagePlayProcessor Processor = null;
 
-        public Form1()
+        public ImagePlay()
         {
 
             InitializeComponent();
 
-            Processor = new ImageProcessor();
+            Processor = new ImagePlayProcessor();
             imageProcessorBindingSource.DataSource = Processor;
 
             spinnerHorizontalTileCount.DataBindings.Add("Value", Processor, nameof(Processor.HorizontalTileCount));
@@ -36,8 +36,13 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
-            if (Processor.LoadImage("C:\\Temp\\TestIris.jpg"))
+           string imageRootPath = "C:\\Temp\\";
+
+            string imageFile = "TestIris.jpg";
+            // string imageFile = "Test_Lines.png";
+
+
+            if (Processor.LoadImage(imageRootPath + imageFile))
                 pictureBox1.Image = Processor.OriginalImage;
 
             this.imageProcessorBindingSource.ResetBindings(false);
@@ -51,7 +56,7 @@ namespace WindowsFormsApp1
             {
 
                 Processor.ResetProcessedImage();
-                Processor.CreateImageWithSpread();
+                Processor.DrawImageWithSpread();
                 pictureBox2.Image = Processor.ProcessedImage;
             }
         }
@@ -68,7 +73,7 @@ namespace WindowsFormsApp1
                 //pictureBox2.Image = null;
                 Processor.ResetProcessedImage();
                 Processor.MapImage();
-                Processor.DrawNewImage();
+                Processor.DrawPatchedImage();
                 pictureBox2.Image = Processor.ProcessedImage;
             }
         }
@@ -77,7 +82,6 @@ namespace WindowsFormsApp1
         {
 
         }
-
     }
 
 
