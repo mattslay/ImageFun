@@ -12,9 +12,11 @@ The **MapImage**() function on the **ImagePlayProcessor** class will scan over a
 ![](Documentation/MatMan_Original.png)
 
 **Rendered Image**
+
 ![](Documentation/MatMan_Rendered.png)
 
 
 **More abstract**
 (Fewer tiles, larger patches)
+
 ![](Documentation/test_iris_rendered_002.png)
