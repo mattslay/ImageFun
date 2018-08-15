@@ -45,6 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChooseImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChooseImage.Designer.cs">
+      <DependentUpon>ChooseImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="ColorExtension.cs" />
     <Compile Include="ColorHelper.cs" />
     <Compile Include="ImagePlay.cs">
@@ -57,6 +63,9 @@
     <Compile Include="ImagePlayProcessor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ChooseImage.resx">
+      <DependentUpon>ChooseImage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ImagePlay.resx">
       <DependentUpon>ImagePlay.cs</DependentUpon>
     </EmbeddedResource>

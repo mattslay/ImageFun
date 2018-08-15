@@ -16,7 +16,6 @@ namespace WindowsFormsApp1
 
         public ImagePlay()
         {
-
             InitializeComponent();
 
             Processor = new ImagePlayProcessor();
@@ -36,11 +35,30 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-           string imageRootPath = "C:\\Temp\\";
+            ChooseImage chooseImage = new ChooseImage();
+            chooseImage.ShowDialog();
+            ChooseImage.ImageChoices imageChoice = chooseImage.ImageChoice;
 
-            string imageFile = "TestIris.jpg";
-            // string imageFile = "Test_Lines.png";
+            string imageRootPath = "";
+            string imageFile = "";
 
+            if (imageChoice == ChooseImage.ImageChoices.SampleImage)
+            {
+                imageRootPath = "C:\\Temp\\";
+                imageFile = "TestIris.jpg";
+                // imageFile = "Test_Lines.png";
+            }
+            else if(imageChoice == ChooseImage.ImageChoices.SelectImage)
+            {
+                OpenFileDialog fileDialog = new OpenFileDialog();
+                fileDialog.ShowDialog();
+                imageRootPath = fileDialog.FileName;
+
+                if (string.IsNullOrWhiteSpace(imageRootPath))
+                    return;
+            }
+            else
+                return;
 
             if (Processor.LoadImage(imageRootPath + imageFile))
                 pictureBox1.Image = Processor.OriginalImage;
